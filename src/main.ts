@@ -1,5 +1,6 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import path from "node:path";
+import fs from "node:fs";
 import started from "electron-squirrel-startup";
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -8,8 +9,56 @@ if (started) {
 }
 
 let mainWindow: BrowserWindow | null = null;
+let reminderInterval: NodeJS.Timeout | null = null;
 
-const REMINDER_INTERVAL = 30 * 60 * 1000; // 30 minutes
+const CONFIG_PATH = path.join(app.getPath("userData"), "config.json");
+
+interface Config {
+  intervalMinutes: number;
+}
+
+const DEFAULT_CONFIG: Config = {
+  intervalMinutes: 30,
+};
+
+function loadConfig(): Config {
+  try {
+    if (fs.existsSync(CONFIG_PATH)) {
+      const data = fs.readFileSync(CONFIG_PATH, "utf-8");
+      return { ...DEFAULT_CONFIG, ...JSON.parse(data) };
+    }
+  } catch {
+    // Ignore errors, use default
+  }
+  return DEFAULT_CONFIG;
+}
+
+function saveConfig(config: Config): void {
+  fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
+}
+
+function startReminderInterval(): void {
+  if (reminderInterval) {
+    clearInterval(reminderInterval);
+  }
+  const config = loadConfig();
+  const intervalMs = config.intervalMinutes * 60 * 1000;
+  reminderInterval = setInterval(showReminder, intervalMs);
+}
+
+// IPC handlers
+ipcMain.handle("get-interval", () => {
+  const config = loadConfig();
+  return config.intervalMinutes;
+});
+
+ipcMain.handle("set-interval", (_event, minutes: number) => {
+  const config = loadConfig();
+  config.intervalMinutes = minutes;
+  saveConfig(config);
+  startReminderInterval();
+  return true;
+});
 
 const createWindow = () => {
   // If window already exists, just show it
@@ -68,8 +117,8 @@ app.on("ready", () => {
   // Show initial reminder
   createWindow();
 
-  // Set up recurring reminder every 30 minutes
-  setInterval(showReminder, REMINDER_INTERVAL);
+  // Set up recurring reminder based on config
+  startReminderInterval();
 });
 
 // Keep app running in background on macOS
