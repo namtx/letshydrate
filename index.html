@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hydrate Reminder</title>
+  </head>
+  <body>
+    <div class="reminder-container">
+      <img src="https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExaG84YjBteGt6ajYzZjFhYnptMjI4aTBkZW5tMTJ3OXMza3o2azFhciZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/X0NdPy1uKXz6nfjRQO/giphy.gif" alt="Hydrate" class="hydrate-gif" />
+      <h1>Time to Hydrate!</h1>
+      <p>Take a moment to drink some water.</p>
+
+      <div class="water-total">
+        <span id="total-water">0</span> ml today
+      </div>
+
+      <div class="log-buttons">
+        <button class="log-btn" data-amount="200">+200ml</button>
+        <button class="log-btn" data-amount="400">+400ml</button>
+        <button class="log-btn" data-amount="500">+500ml</button>
+      </div>
+
+      <button id="reset-btn">Reset today</button>
+
+      <button id="dismiss-btn">Got it!</button>
+    </div>
+    <script type="module" src="/src/renderer.ts"></script>
+  </body>
+</html>
