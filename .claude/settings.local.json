@@ -1,0 +1,17 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx skills add:*)",
+      "Bash(npm test:*)",
+      "Bash(npm run:*)",
+      "Bash(npm start)",
+      "WebFetch(domain:media2.giphy.com)",
+      "Bash(gh repo create:*)",
+      "Bash(git init:*)",
+      "Bash(git add:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)",
+      "Bash(gh repo edit:*)"
+    ]
+  }
+}
