@@ -95,9 +95,34 @@ p {
   border-color: #e74c3c;
 }
 
+.settings {
+  -webkit-app-region: no-drag;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 16px 0;
+  font-size: 14px;
+  color: #666;
+}
+
+.settings select {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background: white;
+  cursor: pointer;
+}
+
+.settings select:focus {
+  outline: none;
+  border-color: #5a9fd4;
+}
+
 #dismiss-btn {
   -webkit-app-region: no-drag;
-  margin-top: 16px;
+  margin-top: 8px;
   padding: 10px 32px;
   font-size: 14px;
   font-weight: 600;

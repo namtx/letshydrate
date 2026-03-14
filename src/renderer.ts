@@ -78,6 +78,30 @@ resetBtn?.addEventListener("click", () => {
   updateDisplay();
 });
 
+// Interval selector
+const intervalSelect = document.getElementById(
+  "interval-select",
+) as HTMLSelectElement;
+
+// Load current interval setting
+declare global {
+  interface Window {
+    electronAPI: {
+      getInterval: () => Promise<number>;
+      setInterval: (minutes: number) => Promise<boolean>;
+    };
+  }
+}
+
+window.electronAPI.getInterval().then((minutes) => {
+  intervalSelect.value = minutes.toString();
+});
+
+intervalSelect?.addEventListener("change", () => {
+  const minutes = parseInt(intervalSelect.value, 10);
+  window.electronAPI.setInterval(minutes);
+});
+
 // Dismiss button
 const dismissBtn = document.getElementById("dismiss-btn");
 dismissBtn?.addEventListener("click", () => {
